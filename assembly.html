@@ -5,29 +5,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>De Novo Assembly</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
-	
+
 
 </head>
 <body>
 
 <div class="top-bar" >
-	
+
 	<h1>BACTERIAL MOLECULAR GENETICS - MCBF/FFUL</h1>
-</div>	
+</div>
 
 <div class="container1" >
 	<p>
-		
+
 	</p>
-<h1  align="center">::<i>De novo</i> Assembly::</h1>	
+<h1  align="center">::<i>De novo</i> Assembly::</h1>
 </div>
 <div class="container1" >
 <h1  align="right">
 	<p>
-		
+
 	</p>
-	
-</h1>	
+
+</h1>
 </div>
 
 <a href="index.html" target="_blank"><<-HOME</a>
@@ -42,12 +42,12 @@
 <div class="container2" >
 <h1  align="right">
 	<p>
-		
+
 	</p>
 	<p>
-		
+
 	</p>
-</h1>	
+</h1>
 </div>
 <p>  </p>
 <p>  </p>
@@ -58,7 +58,7 @@
 
 <p> This second module explores an alternative approach to reconstruct genomic data from NGS reads – de novo Assembly. Rather than using a mapping strategy to guide the assembly of sequence reads, de novo Assembly attempts to reconstruct genomes by exploring read overlapping and contiguity. This approach is more informative when we are dealing with a new species for which there is no reference genome or even a new strain of a well-known pathogen [14, 15].</p>
 
-<p>However, the process of assembling reads into contigs can be challenging due to the huge number of reads produced from random sampling of the genome being studied. Additionally, high sequencing error rate, repeat regions/patterns and uneven sequencing depth are some of the problems that can influence the correct assembly of a genome. There are three major approaches for assembling reads: i) overlap-and-extend; ii) string graph; and iii) de Bruijn graphs. Overlap-and-extend methods iteratively attempt to first find read overlaps (where the suffix of a read is equal to the prefix of another read with a length that meets a defined threshold) and then extend the first read constructing a longer read (SSAKE, VCAKE and SHARCGS). The String Graph based assemblers constructs a string graph for every read in which each read is a vertex and there is an edge from a vertex to another if there is read overlap (Edena and BOA).  These first two approaches are more susceptible to sequencing errors and can lead to more memory consumption [15, 16].</p> 
+<p>However, the process of assembling reads into contigs can be challenging due to the huge number of reads produced from random sampling of the genome being studied. Additionally, high sequencing error rate, repeat regions/patterns and uneven sequencing depth are some of the problems that can influence the correct assembly of a genome. There are three major approaches for assembling reads: i) overlap-and-extend; ii) string graph; and iii) de Bruijn graphs. Overlap-and-extend methods iteratively attempt to first find read overlaps (where the suffix of a read is equal to the prefix of another read with a length that meets a defined threshold) and then extend the first read constructing a longer read (SSAKE, VCAKE and SHARCGS). The String Graph based assemblers constructs a string graph for every read in which each read is a vertex and there is an edge from a vertex to another if there is read overlap (Edena and BOA).  These first two approaches are more susceptible to sequencing errors and can lead to more memory consumption [15, 16].</p>
 
 <p>De Bruijn Graph-based algorithms are presently the most widely used approaches and are used in several software packages for genome assembly from NGS reads (e.g. Velvet, SOAPdenovo, SPAdes, etc) [17, 18]. Graphs are mathematical structures used to model pairwise relations between objects. In essence, each vertex represents a length-k substring (k-mer) in a read and there is a directed edge from vertex u to vertex v if u and v are consecutive k-mers in a read, i.e., the last k–1 nucleotides of the k-mer represented by u is the same as the first k–1 nucleotides of the k-mer represented by v [16].
 </p>
@@ -76,14 +76,14 @@
 <p>CGATA</p>
 
 <p>We can use a simple overlap and extend approach but let’s use the de Bruijn Graph approach to find k-mers. List all 4 bp k-mers from the reads above.</p>
-<img src="images/blank_space.jpg" alt="blank space"> 
+<img src="images/blank_space.jpg" alt="blank space">
 <p> </p>
 <p> </p>
 <p> </p>
 <p> </p>
 <p> First, link the k-mers that only differ by k-1 nucleotides. Then, you can try to establish links by creating a path between the nodes to find your contig – each k-mer is a node. The two main rules are: visit all nodes at least once and use the minimal path length.</p>
 <p> Write the final contig.</p>
-<img src="images/blank_space2.jpg" alt="blank space"> 
+<img src="images/blank_space2.jpg" alt="blank space">
 
 
 <br>
@@ -94,7 +94,6 @@
 
 
 <pre>
-<code>cd Data2/projects/Kp_all</code>
 
 <code>$ cd Module2</code>
 
@@ -151,7 +150,7 @@ $ assemblathon_stats.pl ./PT000033_41/contigs.fa
 <p>This command will output additional statistics. The assemblathon_stats.pl (Keith Bradnam, UC Davis) is a Perl written script that calculates some statistics for assemblies and scaffolds (we will talk about this ahead). It was written for the Assemblathon contests to assess state-of-the-art methods in the field of genome assembly [14]. You can look at some of these metrics and take note in the table below.  The output will be similar to the one below and as we are only working with assembled contigs we can focus on the third section only: </p>
 
 
-<img src="images/asssemblathon_stats.png" alt="Assemblathon example output"> 
+<img src="images/asssemblathon_stats.png" alt="Assemblathon example output">
 
 <p>What do these parameters mean?</p>
 <p>•	Contigs: number of contigs? Which is better, more or less contigs?</p>
@@ -161,7 +160,7 @@ $ assemblathon_stats.pl ./PT000033_41/contigs.fa
 <p>How many contigs are larger than 10 Kb? __________________________</p>
  </p>
 
- <img src="images/kmer_table.JPG" alt="K-mer statistics table to fill"> 
+ <img src="images/kmer_table.JPG" alt="K-mer statistics table to fill">
 
 <p>Repeat this exercise using a k-mer length of 49 and 55 (don’t forget to change the directory name: PT000033_41 to PT000033_49 or PT000033_55).  </p>
 <p>Which is the best k-mer length? ___________________ </p>
@@ -198,7 +197,7 @@ $ Bandage
 
 <p> This will start the Bandage window, go to File > Load Graph and select the LastGraph file from an assembly at your choice to open the Graph of your assembly. To visualize this Graph click on Draw Graph. Since this is a bacterial genome you can draw the entire graph. You can compare the different assemblies using this approach.</p>
 <p>The graph for your assembly will show the different nodes and be similar to this: </p>
-<img src="images/bandage_output.JPG" alt="Bandage Output Example"  width="100%"> 
+<img src="images/bandage_output.JPG" alt="Bandage Output Example"  width="100%">
 
 <p> Other software for assembly statistics/QC:</p>
 <p> There are more complete alternatives to evaluate the assembly quality, namely, using BUSCo or QUAST. QUAST for example compares against a reference genome, provided that one exists. Busco offers another alternative by checking the degree of representation of a set of core genes in each assembly.</p>
@@ -258,7 +257,7 @@ $ abacas.pl -r ../NC000962_3.fasta -q contigs.fa -p promer -b -d -a
 <p> You can choose to either do an alignment based on NUCmer (option: -p nucmer) or PROmer (option: -p promer) algorithms. NUCmer is a Perl script pipeline for the alignment of multiple closely related nucleotide sequences. PROmer (PROtein MUMmer) is a close relative to the NUCmer script. It follows the exact same steps as NUCmer and even uses most of the same programs in its pipeline, with one exception - all matching and alignment routines are performed on the six-frame amino acid translation of the DNA input sequence. This provides promer with a much higher sensitivity than nucmer because protein sequences tend to diverge much slower than their underlying DNA sequence. Therefore, on the same input sequences, promer may find many conserved regions that nucmer will not, simply because the DNA sequence is not as highly conserved as the amino acid translation.</p>
 <p>By the end of this ordering and scaffolding process, ABACAS will show a screen like the one below: </p>
 
-<img src="images/abacas_output.png" alt="Abacas Output Example"> 
+<img src="images/abacas_output.png" alt="Abacas Output Example">
 
 
 <p> Now, what is ACT? ACT stands for Artemis Comparison Tool, a Java-written application for displaying pairwise comparisons between two or more DNA sequences (basically ACT has several Artemis windows) [22]. It can be used to identify and analyze regions of similarity and difference between genomes and to explore conservation of synteny, in the context of the entire sequences and their annotation. It can read complete EMBL, GENBANK and GFF entries or sequences in FASTA or raw format.</p>
@@ -271,13 +270,13 @@ $ act
 </pre>
 
 <p>ACT will start its main window, go to File > Open and select the files that ABACAS indicates from comparison: </p>
-<img src="images/act_output.png" alt="Act Output Example"> 
-<img src="images/act_output2.png" alt="Act Output Example"> 
+<img src="images/act_output.png" alt="Act Output Example">
+<img src="images/act_output2.png" alt="Act Output Example">
 <p><u>Sequence 1:</u> NC000962_3.fasta </p>
 <p><u>Comparison file 1:</u> contigs.fa_NC00096_3.fasta.crunch </p>
 <p><u>Sequence 2:</u> contigs.fa_NC00096_3.fasta.fasta </p>
 <p>Sequence 2 file now contains your contigs stitched to one another and separated by N’s (scaffold) highlighting possible gaps in the assembly or regions not present in the reference genome. Look at the ACT comparison.  </p>
-<img src="images/act_synteny_output.png" alt="Act Output Example" width="100%"> 
+<img src="images/act_synteny_output.png" alt="Act Output Example" width="100%">
 <p>Is synteny conserved across these two genomes? What did you expect from M. tuberculosis?  </p>
 <p>Besides looking at the synteny of these large regions we can look at the conservation of gene synteny and distribution across this comparison. To do this we can read an entry onto of the sequences by going to File > NC000962_3.fasta > Read an Entry… </p>
 <img src="images/act_output3.png" alt="Act Output Example">
@@ -294,6 +293,6 @@ $ act
 <p> </p>
 <p> </p>
 
-
+<a href="index.html" target="_blank"><<-HOME</a>
 </body>
 </html>
