@@ -236,57 +236,87 @@ $ conda deactivate
 
 <br>
 <br>
-<h2> Exercise 3 –Contig Ordering and Scaffolding</h2>
-<p>In this next exercise we will pick up from where we left in the previous exercise. Now that you have your contigs assembled from raw sequence reads we can order the contigs obtained using a suitable reference genome for this process (usually the closest high-quality finished genome). In this exercise we will use the reference genome used in Module 1 (M. tuberculosis H37Rv, GenBank Acc: NC000962.3). This reference-aided contig ordering becomes important as we progress towards discovery and comparative genomics processes. Besides contig ordering, the process of joining the contigs is called scaffolding. Contigs within a scaffold are separated by N letters which represent gaps in the sequence. A scaffold is therefore chains of ordered contigs created using information about their relative position against a reference genome. </p>
-<p> The software we will be using for this task at hand is called ABACAS [21]. This is a stand-alone program intended to rapidly contiguate (align, order, orientate), visualize and design primers to close gaps on shotgun assembled contigs based on a reference sequence. ABACAS is implemented in Perl and requires MUMmer and (optionally) BLAST installed on the local machine.</p>
-<p>Let’s order the contigs by simply typing the following: </p>
+<h2>Exercise 3 - Genome Annotation</h2>
+<p>In the last exercise of this module we will attempt to find features along the scaffold created earlier and add some information concerning it to genome. This is a process called annotation and, it is necessary if we want to take full advantage of having the genome sequence and move towards functional genomics [2]. This annotation process is made with biologically relevant information that can range from gene models, functional data (including gene ontology or “Kyoto Encyclopedia of Genes and Genomes”, KEGG, pathways) to epigenetic or microRNA modifications. Generally, this procedure is limited to the annotation of protein coding sequences and may include the annotation of ribosomal and transfer RNAs.</p>
+<p>We can take three different approaches to annotation: web-based tools (RAST, NCBI annotation); command-line tools that perform de novo gene discovery (Prokka and DIYA); and, transfer of annotation data from a reference genome such as the one we used in the previous exercise (RATT, BG-7) [8, 13, 14].</p>
+<p>Moreover, annotation will imply a different format other than FASTA. While the latter only stores the sequence, it is possible to have a second file in the GFF (General Feature File) format containing the annotation. Alternatively, we can combine these data on a GenBank file. You can look up online the structure of both formats.</p>
+
+
+<p><u>Prokka Annotation:</u></p>
+<p>In this exercise we will take the first two approaches and we will start with annotation with Prokka, a software tool to annotate bacterial, archaeal and viral genomes quickly and produce standards-compliant output files [13]. Prokka uses a variety of databases when trying to assign function to the predicted CDS features. It takes a hierarchial approach to make it fast. The initial core databases are derived from UniProtKB.</p>
+
+
+
+
+<p>To start the annotation let’s type:</p>
+
 
 <pre>
-<code>
-$ cd PT000033_49
+$ cd /home/centos/Module2/PT000033_49
 
-$ cp ../NC000962_3.fasta ./
+$ prokka --outdir ./PT000033_prokka --prefix PT000033 contigs.fa
 
-$ abacas.pl -r ../NC000962_3.fasta -q contigs.fa -p promer -b -d -a
+# Alternatively, for a monomorphic species such as Mycobacterium tuberculosis you can opt by transferring the annotation from M. tuberculosis H37Rv reference strain using the –-proteins option:
 
-# Abacas will align the contigs present in the contigs file (contigs.fa) against the reference genome and will do so based on the promer algorithm
-</code>
+$ cp ~/course_files/NC000962_3.gbk .
+
+$ prokka --outdir ./PT000033_prokka --prefix PT000033 --proteins NC000962_3.gbk contigs.fa
+
 </pre>
 
+<p>Here, you have carried out a simple annotation procedure using Prokka’s core database. With the --outdir option you specified the creation of a new output directory and the --prefix option allow you to set the prefix name of your files. You can look at other Prokka options by simply typing:</p>
 
-<p> You can choose to either do an alignment based on NUCmer (option: -p nucmer) or PROmer (option: -p promer) algorithms. NUCmer is a Perl script pipeline for the alignment of multiple closely related nucleotide sequences. PROmer (PROtein MUMmer) is a close relative to the NUCmer script. It follows the exact same steps as NUCmer and even uses most of the same programs in its pipeline, with one exception - all matching and alignment routines are performed on the six-frame amino acid translation of the DNA input sequence. This provides promer with a much higher sensitivity than nucmer because protein sequences tend to diverge much slower than their underlying DNA sequence. Therefore, on the same input sequences, promer may find many conserved regions that nucmer will not, simply because the DNA sequence is not as highly conserved as the amino acid translation.</p>
-<p>By the end of this ordering and scaffolding process, ABACAS will show a screen like the one below: </p>
-
-<img src="images/abacas_output.png" alt="Abacas Output Example">
-
-
-<p> Now, what is ACT? ACT stands for Artemis Comparison Tool, a Java-written application for displaying pairwise comparisons between two or more DNA sequences (basically ACT has several Artemis windows) [22]. It can be used to identify and analyze regions of similarity and difference between genomes and to explore conservation of synteny, in the context of the entire sequences and their annotation. It can read complete EMBL, GENBANK and GFF entries or sequences in FASTA or raw format.</p>
-<p> We can go ahead and have a look at the comparison that ABACAS already and present on the comparison file (*.crunch). </p>
-<p> ACT can be started from any terminal window by typing:</p>
 <pre>
-<code>
-$ act
-</code>
+$ prokka
 </pre>
 
-<p>ACT will start its main window, go to File > Open and select the files that ABACAS indicates from comparison: </p>
-<img src="images/act_output.png" alt="Act Output Example">
-<img src="images/act_output2.png" alt="Act Output Example">
-<p><u>Sequence 1:</u> NC000962_3.fasta </p>
-<p><u>Comparison file 1:</u> contigs.fa_NC00096_3.fasta.crunch </p>
-<p><u>Sequence 2:</u> contigs.fa_NC00096_3.fasta.fasta </p>
-<p>Sequence 2 file now contains your contigs stitched to one another and separated by N’s (scaffold) highlighting possible gaps in the assembly or regions not present in the reference genome. Look at the ACT comparison.  </p>
-<img src="images/act_synteny_output.png" alt="Act Output Example" width="100%">
-<p>Is synteny conserved across these two genomes? What did you expect from M. tuberculosis?  </p>
-<p>Besides looking at the synteny of these large regions we can look at the conservation of gene synteny and distribution across this comparison. To do this we can read an entry onto of the sequences by going to File > NC000962_3.fasta > Read an Entry… </p>
-<img src="images/act_output3.png" alt="Act Output Example">
+<p>Meanwhile the annotation process will take about 16 minutes, but when finished you can find the new PT000033_prokka directory. Let’s go inside:</p>
 
-<p>You can open the NC000962_3.gbk file which is in the Genbank format, it contains the sequence along with genome annotation. Here, we are reading it onto the NC000962_3.fasta sequence and since the sequence is already present ACT will read the annotation only.  You can see the annotation appearing on the top part of the comparison window. </p>
-<img src="images/act_output4.png" alt="Act Output Example" width="100%">
-<p><u>Additional notes:</u></p>
-<p>Contig ordering can also be carried out in Mauve, a genome aligner tool implemented with a Graphical User Interface (GUI), and therefore, more user friendly. The advantage of ABACAS over Mauve is that you can more easily implement contig ordering and scaffolding on a script that you run through the command-line.  </p>
-<p>For comparison purposes Mauve is also a great tool for multi-genome alignment (in particular using its Progressive Mauve algorithm). You can align your contigs against the contigs of other assembled strains, a reference strain and so on. Furthermore, during the alignment process, Mauve identifies conserved segments that appear to be internally free from genome rearrangements. Such regions are referred to as Locally Collinear Blocks (LCBs). </p>
-<p>Also, ABACAS is part of a software bundle developed at the Wellcome Trust Sanger Institute called PAGIT. PAGIT is designed to finish high quality draft genome and, includes: ABACAS; IMAGE, an iterative approach for closing gaps in assembled genomes using mate pair information; iCORN, that enables errors in the consensus sequence to be corrected by iteratively mapping reads to the current assembly; and RATT, a tool to transfer the annotation from a reference genome, or an earlier assembly, onto the latest assembly. </p>
+<pre>
+$ cd PT000033_prokka
+</pre>
+
+<p>Prokka will have outputted the following files:</p>
+<img src="images/prokka_extensions.png" alt="" width="70%">
+
+
+<p>Next, open up Artemis:</p>
+<pre>
+$ art
+</pre>
+<p>And go to File > Open and open the PT000033.gff file:</p>
+
+<img src="images/art_read_gff.png" alt="" width="60%">
+
+
+<p>You can see that the contigs from the previous exercise are now annotated:</p>
+
+<img src="images/art_assembly.png" alt="" width="60%">
+
+
+<p>As a side note, to improve Prokka annotations it is possible to use user-define databases from closely related genomes.</p>
+
+<br>
+<br>
+<br>
+<h2>References</h2>
+
+<p>1	Baker U, Tomson G, Some M, et al. 'How to know what you need to do': a cross-country comparison of maternal health guidelines in Burkina Faso, Ghana and Tanzania. Implement Sci. 2012; 7: 31.</p>
+<p>2	Ekblom R, Wolf JB. A field guide to whole-genome sequencing, assembly and annotation. Evol Appl. 2014; 7: 1026-1042.</p>
+<p>3	Chin FY, Leung HC, Yiu SM. Sequence assembly using next generation sequencing data--challenges and solutions. Sci China Life Sci. 2014; 57: 1140-1148.</p>
+<p>4	Compeau PE, Pevzner PA, Tesler G. How to apply de Bruijn graphs to genome assembly. Nat Biotechnol. 2011; 29: 987-991.</p>
+<p>5	Bankevich A, Nurk S, Antipov D, et al. SPAdes: a new genome assembly algorithm and its applications to single-cell sequencing. J Comput Biol. 2012; 19: 455-477.</p>
+<p>6	Zerbino DR, Birney E. Velvet: algorithms for de novo short read assembly using de Bruijn graphs. Genome research. 2008; 18: 821-829.</p>
+<p>7	Wick RR, Schultz MB, Zobel J, Holt KE. Bandage: interactive visualization of de novo genome assemblies. Bioinformatics. 2015; 31: 3350-3352.</p>
+<p>8	Swain MT, Tsai IJ, Assefa SA, Newbold C, Berriman M, Otto TD. A post-assembly genome-improvement toolkit (PAGIT) to obtain annotated genomes from contigs. Nat Protoc. 2012; 7: 1260-1284.</p>
+<p>9	Carver TJ, Rutherford KM, Berriman M, Rajandream MA, Barrell BG, Parkhill J. ACT: the Artemis Comparison Tool. Bioinformatics. 2005; 21: 3422-3423.</p>
+<p>10	Darling AE, Mau B, Perna NT. progressiveMauve: multiple genome alignment with gene gain, loss and rearrangement. PLoS ONE. 2010; 5: e11147.</p>
+<p>11	Galardini M, Biondi EG, Bazzicalupo M, Mengoni A. CONTIGuator: a bacterial genomes finishing tool for structural insights on draft genomes. Source Code Biol Med. 2011; 6: 11.</p>
+<p>12	Alonge M, Lebeigle L, Kirsche M, et al. Automated assembly scaffolding using RagTag elevates a new tomato system for high-throughput genome editing. Genome Biol. 2022; 23: 258.</p>
+<p>13	Seemann T. Prokka: rapid prokaryotic genome annotation. Bioinformatics. 2014; 30: 2068-2069.</p>
+<p>14	Overbeek R, Olson R, Pusch GD, et al. The SEED and the Rapid Annotation of microbial genomes using Subsystems Technology (RAST). Nucleic Acids Res. 2014; 42: D206-214.</p>
+
+
 
 
 <p> </p>
